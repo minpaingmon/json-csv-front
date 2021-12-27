@@ -98,6 +98,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "json-csv-front:build:production",
+            "firebaseProject": "json-csv-service",
+            "firebaseHostingSite": "json-csv-service"
+          }
         }
       }
     }

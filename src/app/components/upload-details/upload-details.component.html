@@ -1,0 +1,6 @@
+<a href="{{ fileUpload.url }}">{{ fileUpload.name }}</a>
+<button (click)="deleteFileUpload(fileUpload)"
+        class="btn btn-danger btn-sm" style="float: right;margin-left: 20px;">
+  Delete
+</button>
+<button (click)="csvUpload(fileUpload)" class="btn btn-success btn-sm" style="float: right;">CSV</button>
