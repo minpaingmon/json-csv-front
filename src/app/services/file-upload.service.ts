@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
-// import { Angular, AngularFireList } from '@angular/fire';
-// import { AngularFireStorage } from '@angular/fire/storage';
 
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import {finalize, map} from 'rxjs/operators';
 import { FileUpload } from '../models/file-upload.model';
 import {AngularFireStorage} from "@angular/fire/compat/storage";
 import {AngularFireDatabase, AngularFireList} from "@angular/fire/compat/database";
 import firebase from "firebase/compat";
-import app = firebase.app;
 import {HttpClient} from "@angular/common/http";
 
 @Injectable({
@@ -24,10 +21,19 @@ export class FileUploadService {
 
 
   csvUpload(fileUpload: FileUpload): void {
-    const headers = { 'content-type': 'application/json'}
-    const body=JSON.stringify(fileUpload.file);
-    console.log(fileUpload.url)
-    this.http.post(this.baseURL, body,{'headers':headers})
+
+    this.getJSON(fileUpload).subscribe(data => {
+      console.log(data);
+    });
+    this.http.post<any>('http://0.0.0.0:8080/api/integration', this.getJSON(fileUpload)).subscribe(data => {
+
+    })
+  }
+
+  public getJSON(fileUpload: FileUpload): Observable<any> {
+    return this.http.get(fileUpload.url).pipe(map((res: any) =>
+      res.items
+    ));
   }
 
   pushFileToStorage(fileUpload: FileUpload): Observable<number | undefined> {
