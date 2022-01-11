@@ -5,35 +5,34 @@ import {finalize, map} from 'rxjs/operators';
 import { FileUpload } from '../models/file-upload.model';
 import {AngularFireStorage} from "@angular/fire/compat/storage";
 import {AngularFireDatabase, AngularFireList} from "@angular/fire/compat/database";
-import firebase from "firebase/compat";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileUploadService {
   private basePath = '/uploads';
-  baseURL: string = "http://localhost:8080/api/integration";
+  private baseURL = "http://localhost:8080/api/integration";
+  private pathCloudUrl = 'http://0.0.0.0:8080/api/integration';
+  targetJsonData: any = [];
 
   constructor(private db: AngularFireDatabase,private storage: AngularFireStorage,
               private http: HttpClient
   ) { }
 
-
   csvUpload(fileUpload: FileUpload): void {
-
-    this.getJSON(fileUpload).subscribe(data => {
-      console.log(data);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST'
+      })
+    };
+    this.http.get(fileUpload.url).subscribe(data => {
+      this.targetJsonData = data;
+      this.http.post<any>(this.baseURL, this.targetJsonData).subscribe(data => {
+      });
     });
-    this.http.post<any>('http://0.0.0.0:8080/api/integration', this.getJSON(fileUpload)).subscribe(data => {
-
-    })
-  }
-
-  public getJSON(fileUpload: FileUpload): Observable<any> {
-    return this.http.get(fileUpload.url).pipe(map((res: any) =>
-      res.items
-    ));
   }
 
   pushFileToStorage(fileUpload: FileUpload): Observable<number | undefined> {
