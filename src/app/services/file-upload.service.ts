@@ -13,7 +13,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 export class FileUploadService {
   private basePath = '/uploads';
   private baseURL = "http://localhost:8080/api/integration";
-  private pathCloudUrl = 'http://0.0.0.0:8080/api/integration';
+  private pathCloudUrl = 'https://json-service.herokuapp.com/api/integration';
   targetJsonData: any = [];
 
   constructor(private db: AngularFireDatabase,private storage: AngularFireStorage,
@@ -30,7 +30,7 @@ export class FileUploadService {
     };
     this.http.get(fileUpload.url).subscribe(data => {
       this.targetJsonData = data;
-      this.http.post<any>(this.baseURL, this.targetJsonData).subscribe(data => {
+      this.http.post<any>(this.pathCloudUrl, this.targetJsonData).subscribe(data => {
       });
     });
   }
