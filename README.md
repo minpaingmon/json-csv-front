@@ -33,3 +33,18 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ********* firebase setup ******
 
 gsutil cors set cors.json gs://csv-upload-5bb17.appspot.com
+
+********* heroku setup **********
+heroku login
+Create a new Git repository
+Initialize a git repository in a new or existing directory
+
+$ cd my-project/
+$ git init
+$ heroku git:remote -a json-service-module
+Deploy your application
+Commit your code to the repository and deploy it to Heroku using Git.
+
+$ git add .
+$ git commit -am "make it better"
+$ git push heroku master
